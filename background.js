@@ -50,8 +50,6 @@ Trakkr.start = function () {
 					"time": 1,
 					"formattedTime": "00:00:01"
 				});
-			} else {
-				console.log("Not new");
 			}
 			
 		});
