@@ -53,15 +53,10 @@ $("#stopTrakkr").on("click", function () {
 });
 
 $("#clearTrakkr").on("click", function () {
-	var confirm = window.confirm("Clear Trakkr times?");
-
-	if (confirm) {
-		$(this).hide();
-		$("#time").empty();
-		$("#timeElapsed").hide();
-		chrome.extension.sendRequest({
-			msg: "clearTrakkr"
-		});
-	}
-
+	$(this).hide();
+	$("#time").empty();
+	$("#timeElapsed").hide();
+	chrome.extension.sendRequest({
+		msg: "clearTrakkr"
+	});
 });
