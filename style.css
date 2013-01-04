@@ -14,10 +14,12 @@ html, body {
 #logo h1 {
 	width: 100%;
 	color: white;
-	text-shadow: 1px 1px 0px #999,
-				 2px 2px 0px #999,
-				 3px 3px 0px #999,
-				 4px 4px 0px #999;
+	text-shadow: 1px 1px 1px #999,
+				 2px 2px 1px #999,
+				 3px 3px 1px #999,
+				 4px 4px 1px #999,
+				 5px 5px 1px #999,
+				 6px 6px 1px #999;
 	font-size: 40px;
 	text-align: center;
 }
