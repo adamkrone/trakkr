@@ -1,0 +1,104 @@
+html, body {
+	background: #eee;
+	font-family: sans-serif;
+}
+
+#wrapper {
+	padding: 10px 15px 10px 10px;
+}
+
+#logo {
+	margin: 0 10px;
+}
+
+button {
+	min-width: 100px;
+	width: 100%;
+	padding: 5px;
+	border: none;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	text-shadow: 0px 1px 2px #444;
+}
+
+button:focus {
+	outline: none;
+}
+
+#startTrakkr {
+	background: rgb(111, 189, 111);
+	box-shadow: 1px 0px 1px #20610C,
+				0px 1px 1px #4C864C,
+				2px 1px 1px #20610C,
+				1px 2px 1px #4C864C,
+				3px 2px 1px #20610C,
+				2px 3px 1px #4C864C,
+				4px 3px 1px #20610C,
+				3px 4px 1px #4C864C,
+				5px 4px 1px #20610C,
+				4px 5px 1px #4C864C,
+				6px 5px 1px #20610C;
+}			
+
+#stopTrakkr {
+	display: none;
+	background: rgb(219, 97, 97);
+}
+
+#stopTrakkr,
+#clearTrakkr {
+	box-shadow: 1px 0px 1px #743636,
+				0px 1px 1px #A84C4C,
+				2px 1px 1px #743636,
+				1px 2px 1px #A84C4C,
+				3px 2px 1px #743636,
+				2px 3px 1px #A84C4C,
+				4px 3px 1px #743636,
+				3px 4px 1px #A84C4C,
+				5px 4px 1px #743636,
+				4px 5px 1px #A84C4C,
+				6px 5px 1px #743636;
+}
+
+.entry {
+	margin: 5px 0;
+	padding: 10px;
+	border-top: 1px solid #aaa;
+}
+
+.entry:last-child {
+	border-bottom: 1px solid #aaa;
+	margin-bottom: 0;
+}
+
+.title,
+.time,
+.url {
+	margin: 0;
+}
+
+.title {
+	font-size: 16px;
+}
+
+.time {
+	font-size: 15px;
+}
+
+.url {
+	font-size: 12px;
+}
+
+#timeElapsed {
+	display: none;
+	min-width: 151px;
+	padding: 0 10px;
+	font-size: 14px;
+}
+
+#clearTrakkr {
+	display: none;
+	background: rgb(219, 97, 97);
+	color: white;
+}
