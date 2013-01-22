@@ -7,7 +7,7 @@ templates['url'] = template(function (Handlebars,depth0,helpers,partials,data) {
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n<div class=\"entry\">\n	<h2 class=\"title\">";
+  buffer += "\n<div class=\"entry\">\n	<i class=\"settings icon-cog\"></i>\n	<div class=\"controls\">\n		<i class=\"delete icon-trash\"> delete</i>\n	</div>\n	<h2 class=\"title\">";
   stack1 = depth0.title;
   stack1 = typeof stack1 === functionType ? stack1() : stack1;
   buffer += escapeExpression(stack1) + "</h2>\n	<h3 class=\"time\">";

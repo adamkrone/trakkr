@@ -1,17 +1,16 @@
 var BG = chrome.extension.getBackgroundPage(),
-	Trakkr = BG.Trakkr,
-	html = Handlebars.templates.url(Trakkr),
+	html = Handlebars.templates.url(BG.Trakkr),
 	refreshTrakkr;
 
 $("#time").append(html);
 
-if (Trakkr.isRunning) {
+if (BG.Trakkr.isRunning) {
 	$("#startTrakkr").hide();
 	$("#stopTrakkr, #timeElapsed").show();
 	refreshTrakkr = setInterval(function () {
-		html = Handlebars.templates.url(Trakkr);
+		html = Handlebars.templates.url(BG.Trakkr);
 		$("#time").empty().append(html);
-		if (Trakkr.isRunning) {
+		if (BG.Trakkr.isRunning) {
 			$("#startTrakkr").hide();
 			$("#stopTrakkr, #timeElapsed").show();
 		}
@@ -23,6 +22,8 @@ if (Trakkr.isRunning) {
 $("#startTrakkr").on("click", function () {
 
 	window.close();
+
+	$(".settings").hide();
 
 	chrome.extension.sendRequest({
 		msg: "startTrakkr"
@@ -38,7 +39,7 @@ $("#stopTrakkr").on("click", function () {
 
 	$(this).hide();
 
-	$("#startTrakkr, #clearTrakkr").show();
+	$("#startTrakkr, #clearTrakkr, .settings").show();
 
 	clearInterval(refreshTrakkr);
 
@@ -58,5 +59,25 @@ $("#clearTrakkr").on("click", function () {
 	$("#timeElapsed").hide();
 	chrome.extension.sendRequest({
 		msg: "clearTrakkr"
+	});
+});
+
+$("#wrapper").on("click", ".entry", function () {
+	$(this).toggleClass("selected");
+});
+
+$("#wrapper").on("click", ".settings", function () {
+	$(this).siblings(".controls").toggle();
+});
+
+$("#wrapper").on("click", ".delete", function () {
+	var index = $(this).closest(".entry").prevAll().length;
+
+	BG.Trakkr.deleteEntry(index);
+
+	$(this).closest(".entry").fadeOut("slow", function () {
+		html = Handlebars.templates.url(BG.Trakkr);
+		$("#time").empty().append(html);
+		$("#timeElapsed").show();
 	});
 });

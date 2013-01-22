@@ -1,12 +1,20 @@
-var Trakkr = {};
+if (localStorage["default"]) {
+	var Trakkr = JSON.parse(localStorage["default"]);
+} else {
+	var Trakkr = {};
 
-Trakkr.tabs = [];
+	Trakkr.currentSession = "default";
 
-Trakkr.isRunning = false;
+	Trakkr.tabs = [];
 
-Trakkr.timeElapsed = 0;
+	Trakkr.isRunning = false;
 
-Trakkr.formattedtimeElapsed = "00:00:00";
+	Trakkr.timeElapsed = 0;
+
+	Trakkr.formattedtimeElapsed = "00:00:00";
+
+	localStorage[Trakkr.currentSession] = JSON.stringify(Trakkr);
+}
 
 Trakkr.formatTime = function (s) {
     var h = Math.floor(s/3600); //Get whole hours
@@ -41,7 +49,7 @@ Trakkr.start = function () {
 					newTab = false;
 				}
 
-			};
+			}
 
 			if (newTab) {
 				Trakkr.tabs.push({
@@ -72,6 +80,44 @@ Trakkr.clear = function () {
 	Trakkr.tabs = [];
 	Trakkr.timeElapsed = 0;
 	Trakkr.formattedtimeElapsed = "00:00:00";
+};
+
+Trakkr.deleteEntry = function (index) {
+	var entry = Trakkr.tabs[index],
+		time = entry.time;
+
+	Trakkr.tabs.splice(index, 1);
+
+	Trakkr.timeElapsed -= time;
+
+	Trakkr.formattedTimeElapsed = Trakkr.formatTime(Trakkr.timeElapsed);
+
+};
+
+Trakkr.changeSession = function (name) {
+
+	if (localStorage[name]) {
+		Trakkr = JSON.parse(localStorage[name]);
+
+		Trakkr.currentSession = name;
+	} else {
+
+		Trakkr.currentSession = name;
+
+		Trakkr.tabs = [];
+
+		Trakkr.isRunning = false;
+
+		Trakkr.timeElapsed = 0;
+
+		Trakkr.formattedtimeElapsed = "00:00:00";
+
+		localStorage[name] = JSON.stringify(Trakkr);
+	}
+};
+
+Trakkr.updateSession = function () {
+	localStorage[Trakkr.currentSession] = JSON.stringify(Trakkr);
 };
 
 chrome.extension.onRequest.addListener(
