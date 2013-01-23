@@ -1,19 +1,31 @@
-if (localStorage["default"]) {
-	var Trakkr = JSON.parse(localStorage["default"]);
+var Trakkr = {};
+
+Trakkr.session = {};
+
+Trakkr.currentSession = "default";
+
+Trakkr.sessionNames = [];
+
+for (var i = 0; i < localStorage.length; i++) {
+	Trakkr.sessionNames.push(localStorage.key(i));
+}
+
+if (localStorage[Trakkr.currentSession]) {
+	Trakkr.session = JSON.parse(localStorage[Trakkr.currentSession]);
+
+	Trakkr.session.isRunning = false;
 } else {
-	var Trakkr = {};
+	Trakkr.session.tabs = [];
 
-	Trakkr.currentSession = "default";
+	Trakkr.session.isRunning = false;
 
-	Trakkr.tabs = [];
+	Trakkr.session.timeElapsed = 0;
 
-	Trakkr.isRunning = false;
+	Trakkr.session.formattedTimeElapsed = "00:00:00";
 
-	Trakkr.timeElapsed = 0;
+	Trakkr.sessionNames.push("default");
 
-	Trakkr.formattedtimeElapsed = "00:00:00";
-
-	localStorage[Trakkr.currentSession] = JSON.stringify(Trakkr);
+	localStorage[Trakkr.currentSession] = JSON.stringify(Trakkr.session);
 }
 
 Trakkr.formatTime = function (s) {
@@ -25,113 +37,119 @@ Trakkr.formatTime = function (s) {
 };
 
 Trakkr.start = function () {
-	Trakkr.loop = setInterval(function () {
+	if (!Trakkr.session.isRunning) {
+		Trakkr.loop = setInterval(function () {
 
-		chrome.tabs.getSelected(null, function(tab) {
+			chrome.tabs.getSelected(null, function(tab) {
 
-			var currentTabTitle = tab.title,
-				currentTabURL = tab.url,
-				newTab = true;
+				var currentTabTitle = tab.title,
+					currentTabURL = tab.url,
+					newTab = true;
 
-			for (var i = 0; i < Trakkr.tabs.length; i++) {
+				for (var i = 0; i < Trakkr.session.tabs.length; i++) {
 
-				if (Trakkr.tabs[i].url === currentTabURL) {
+					if (Trakkr.session.tabs[i].url === currentTabURL) {
 
-				var currentTime = Trakkr.tabs[i].time,
-					formattedTime;
+					var currentTime = Trakkr.session.tabs[i].time,
+						formattedTime;
 
-					currentTime += 1;
-					formattedTime = Trakkr.formatTime(currentTime);
+						currentTime += 1;
+						formattedTime = Trakkr.formatTime(currentTime);
 
-					Trakkr.tabs[i].time = currentTime;
-					Trakkr.tabs[i].formattedTime = formattedTime;
+						Trakkr.session.tabs[i].time = currentTime;
+						Trakkr.session.tabs[i].formattedTime = formattedTime;
 
-					newTab = false;
+						newTab = false;
+					}
+
 				}
 
-			}
+				if (newTab) {
+					Trakkr.session.tabs.push({
+						"url": currentTabURL,
+						"title": currentTabTitle,
+						"time": 1,
+						"formattedTime": "00:00:01"
+					});
+				}
+				
+			});
 
-			if (newTab) {
-				Trakkr.tabs.push({
-					"url": currentTabURL,
-					"title": currentTabTitle,
-					"time": 1,
-					"formattedTime": "00:00:01"
-				});
-			}
-			
-		});
+			Trakkr.session.timeElapsed += 1;
 
-		Trakkr.timeElapsed += 1;
+			Trakkr.session.formattedTimeElapsed = Trakkr.formatTime(Trakkr.session.timeElapsed);
 
-		Trakkr.formattedTimeElapsed = Trakkr.formatTime(Trakkr.timeElapsed);
+			Trakkr.saveSession();
 
-	}, 1000);
+		}, 1000);
 
-	Trakkr.isRunning = true;
+		Trakkr.session.isRunning = true;
+	}
 };
 
 Trakkr.stop = function () {
 	clearInterval(Trakkr.loop);
-	Trakkr.isRunning = false;
+	Trakkr.session.isRunning = false;
+
+	Trakkr.saveSession();
 };
 
 Trakkr.clear = function () {
-	Trakkr.tabs = [];
-	Trakkr.timeElapsed = 0;
-	Trakkr.formattedtimeElapsed = "00:00:00";
+	Trakkr.session.tabs = [];
+	Trakkr.session.timeElapsed = 0;
+	Trakkr.session.formattedTimeElapsed = "00:00:00";
 };
 
 Trakkr.deleteEntry = function (index) {
-	var entry = Trakkr.tabs[index],
+	var entry = Trakkr.session.tabs[index],
 		time = entry.time;
 
-	Trakkr.tabs.splice(index, 1);
+	console.log(entry);
 
-	Trakkr.timeElapsed -= time;
+	Trakkr.session.tabs.splice(index, 1);
 
-	Trakkr.formattedTimeElapsed = Trakkr.formatTime(Trakkr.timeElapsed);
+	Trakkr.session.timeElapsed -= time;
 
+	Trakkr.session.formattedTimeElapsed = Trakkr.formatTime(Trakkr.session.timeElapsed);
+
+	Trakkr.saveSession();
 };
 
 Trakkr.changeSession = function (name) {
 
+	if (Trakkr.session.isRunning) {
+		Trakkr.stop();
+
+		Trakkr.session.isRunning = false;
+	}
+
 	if (localStorage[name]) {
-		Trakkr = JSON.parse(localStorage[name]);
+		Trakkr.session = JSON.parse(localStorage[name]);
 
-		Trakkr.currentSession = name;
+		Trakkr.session.isRunning = false;
 	} else {
+		Trakkr.session.tabs = [];
 
-		Trakkr.currentSession = name;
+		Trakkr.session.isRunning = false;
 
-		Trakkr.tabs = [];
+		Trakkr.session.timeElapsed = 0;
 
-		Trakkr.isRunning = false;
+		Trakkr.session.formattedTimeElapsed = "00:00:00";
 
-		Trakkr.timeElapsed = 0;
+		localStorage[name] = JSON.stringify(Trakkr.session);
 
-		Trakkr.formattedtimeElapsed = "00:00:00";
-
-		localStorage[name] = JSON.stringify(Trakkr);
+		Trakkr.sessionNames.push(name);
 	}
+
+	Trakkr.currentSession = name;
+
+	Trakkr.saveSession();
 };
 
-Trakkr.updateSession = function () {
-	localStorage[Trakkr.currentSession] = JSON.stringify(Trakkr);
+Trakkr.saveSession = function () {
+	localStorage[Trakkr.currentSession] = JSON.stringify(Trakkr.session);
 };
 
-chrome.extension.onRequest.addListener(
-	function (request, sender, sendResponse) {
-		switch (request.msg) {
-		case "startTrakkr":
-			Trakkr.start();
-			break;
-		case "stopTrakkr":
-			Trakkr.stop();
-			break;
-		case "clearTrakkr":
-			Trakkr.clear();
-			break;
-		}
-	}
-);
+Trakkr.deleteSession = function (name) {
+	localStorage.removeItem(name);
+};

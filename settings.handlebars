@@ -1,0 +1,21 @@
+<p><label><strong>Change Session</strong></label></p>
+<p><select id="changeSession">
+	{{#each sessionNames}}
+	<option value="{{this}}">{{this}}</option>
+	{{/each}}
+	<option value=""></option>
+	<option value="new">Add Session</option>
+</select></p>
+
+<p><input type="text" id="newSessionName" placeholder="Session Name"></p>
+
+<p><input type="submit" id="submitChangeSession" value="Change Session"></p>
+
+<p><label><strong>Delete Session</strong></label></p>
+<p><select id="deleteSession">
+	{{#each sessionNames}}
+	<option value="{{this}}">{{this}}</option>
+	{{/each}}
+</select></p>
+
+<p><input type="submit" id="submitDeleteSession" value="Delete Session"></p>

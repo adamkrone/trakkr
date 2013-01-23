@@ -1,18 +1,12 @@
 html, body {
+	width: 500px;
 	background: #D1DBDF;
 	font-family: sans-serif;
 }
 
-#wrapper {
-	padding: 10px 15px 10px 10px;
-}
-
-#logo {
-	margin: 0 10px;
-}
-
 h1 {
 	width: 100%;
+	margin-top: 5px;
 	color: #5F9FB8;
 	text-shadow: 1px 1px 1px #24545A,
 				 2px 2px 1px #24545A,
@@ -22,6 +16,10 @@ h1 {
 				 6px 6px 1px #24545A;
 	font-size: 40px;
 	text-align: center;
+}
+
+h2 {
+	font-size: 20px;
 }
 
 button {
@@ -34,13 +32,54 @@ button {
 	font-weight: bold;
 	font-size: 14px;
 	text-shadow: 0 1px 2px #444;
+	cursor: pointer;
 }
 
 button:focus {
 	outline: none;
 }
 
+#notifications {
+	display: none;
+}
+
+#wrapper {
+	padding: 10px 15px 10px 10px;
+}
+
+#logo {
+	margin: 0 10px;
+}
+
+#globalSettings {
+	position: absolute;
+	top: 15px;
+	right: 20px;
+	opacity: .3;
+	cursor: pointer;
+}
+
+#globalSettings:hover {
+	opacity: 1;
+}
+
+#trakkrSettings {
+	display: none;
+	padding: 10px;
+	background: #E8F5F8;
+}
+
+#changeSession {
+	width: 250px;
+	padding: 3px;
+}
+
+#newSessionName {
+	display: none;
+}
+
 #startTrakkr {
+	margin-bottom: 20px;
 	background: rgb(111, 189, 111);
 	box-shadow: 1px 0 1px #20610C,
 				0 1px 1px #4C864C,
@@ -82,7 +121,6 @@ button:focus {
 	border-top: 1px solid #dadada;
 }
 
-.entry:hover,
 .selected {
 	background: #E8F5F8;
 }
@@ -96,6 +134,7 @@ button:focus {
 	position: absolute;
 	top: 5px;
 	right: 5px;
+	display: none;
 	opacity: .3;
 }
 
